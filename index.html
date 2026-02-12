@@ -1,0 +1,676 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Kem Deth - Frontend Developer specializing in responsive web design, JavaScript, and modern web technologies. View my portfolio and projects."
+    />
+    <meta
+      name="keywords"
+      content="Frontend Developer, Web Developer, HTML, CSS, JavaScript, Bootstrap, Portfolio"
+    />
+    <meta name="author" content="Kem Deth" />
+
+    <!-- Open Graph Meta Tags -->
+    <meta
+      property="og:title"
+      content="Kem Deth - Frontend Developer Portfolio"
+    />
+    <meta
+      property="og:description"
+      content="Frontend Developer specializing in responsive web design and modern web technologies"
+    />
+    <meta
+      property="og:image"
+      content="https://ui-avatars.com/api/?name=Kem+Deth&size=400&background=10b981&color=fff&bold=true"
+    />
+    <meta property="og:url" content="https://kemdeth.dev" />
+    <meta property="og:type" content="website" />
+
+    <!-- Twitter Card Meta Tags -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Kem Deth - Frontend Developer" />
+    <meta
+      name="twitter:description"
+      content="Frontend Developer specializing in responsive web design"
+    />
+    <meta
+      name="twitter:image"
+      content="https://ui-avatars.com/api/?name=Kem+Deth&size=400&background=10b981&color=fff&bold=true"
+    />
+    <link rel="stylesheet" href="css/style.css" />
+    <title>Kem Deth - Frontend Developer</title>
+  </head>
+  <body>
+    <header>
+      <nav class="container">
+        <div class="logo">
+          <a href="index.html">KD</a>
+        </div>
+
+        <ul class="nav-links">
+          <li><a href="#about">About</a></li>
+          <li><a href="#skills">Skills</a></li>
+          <li><a href="#projects">Projects</a></li>
+          <!-- <li><a href="#blog">Blog</a></li> -->
+          <li><a href="#contact">Contact</a></li>
+
+          <li>
+            <button
+              class="theme-toggle"
+              id="themeToggle"
+              aria-label="Toggle dark mode"
+            >
+              🌙
+            </button>
+          </li>
+        </ul>
+      </nav>
+    </header>
+
+    <section class="hero">
+      <div class="container">
+        <img src="/image/Deth.jpg" alt="Kem Deth" class="profile-image" />
+        <h1>Kem Deth</h1>
+        <p class="tagline">
+          Frontend Developer | Building Responsive & User-Friendly Experiences
+        </p>
+        <div class="cta-buttons">
+          <a href="#contact" class="btn btn-primary">Get In Touch</a>
+          <a href="#projects" class="btn btn-secondary">View Projects</a>
+          <a
+            href="/CV/KemDeth.pdf"
+            class="btn btn-download"
+            onclick="
+              alert('Please upload your resume.pdf file to enable download');
+              return true;
+            "
+            >📄 Download Resume</a
+          >
+        </div>
+      </div>
+    </section>
+
+    <section id="about" class="content-section">
+      <div class="container">
+        <h2 class="section-title">About Me</h2>
+        <div class="about-content">
+          <div class="about-text">
+            <h3>Hello! I'm Kem Deth</h3>
+            <p>
+              I am an enthusiastic Frontend Developer with a passion for
+              creating responsive, user-friendly websites. Currently pursuing a
+              degree in Computer Science at the Royal University of Phnom Penh,
+              I have developed a strong foundation in modern web technologies
+              through academic projects and continuous self-learning.
+            </p>
+            <p>
+              I am eager to apply my technical skills to real-world projects and
+              gain hands-on experience in web development. My approach combines
+              technical proficiency with creative problem-solving, and I'm
+              always excited to learn new technologies and best practices.
+            </p>
+            <p>
+              I am actively seeking entry-level opportunities where I can
+              contribute to meaningful projects while continuing to grow as a
+              developer.
+            </p>
+            <h4 style="color: var(--primary); margin: 1.5rem 0 1rem">
+              Soft Skills
+            </h4>
+            <div class="soft-skills">
+              <span class="soft-skill-tag">💬 Communication</span>
+              <span class="soft-skill-tag">🤝 Teamwork</span>
+              <span class="soft-skill-tag">⏱️ Time Management</span>
+              <span class="soft-skill-tag">🎯 Problem Solving</span>
+              <span class="soft-skill-tag">📚 Quick Learner</span>
+              <span class="soft-skill-tag">✨ Adaptability</span>
+            </div>
+          </div>
+          <div class="education-box">
+            <h4>🎓 Education</h4>
+            <p><strong>Royal University of Phnom Penh</strong></p>
+            <p>Bachelor's Degree in Computer Science</p>
+            <p>2025 - Present</p>
+
+            <div class="certifications">
+              <h4>📜 Certifications</h4>
+              <div class="cert-item">
+                ✓ Responsive Web Design - freeCodeCamp
+              </div>
+              <div class="cert-item">
+                ✓ JavaScript Algorithms - freeCodeCamp
+              </div>
+              <div class="cert-item">✓ Web Development Bootcamp - Udemy</div>
+              <div class="cert-item">✓ Git & GitHub Essentials - Coursera</div>
+              <p style="font-size: 0.85rem; margin-top: 1rem; opacity: 0.8">
+                * Update with your actual certifications
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="skills">
+      <div class="container">
+        <h2 class="section-title">Technical Skills</h2>
+        <div class="skills-grid">
+          <div class="skill-card">
+            <h3>Frontend Development</h3>
+            <div class="skill-item">
+              <div class="skill-name">
+                <span>HTML5</span>
+                <span>90%</span>
+              </div>
+              <div class="skill-bar">
+                <div
+                  class="skill-progress"
+                  data-progress="90"
+                  style="width: 0"
+                ></div>
+              </div>
+            </div>
+            <div class="skill-item">
+              <div class="skill-name">
+                <span>CSS3 & Bootstrap 5</span>
+                <span>85%</span>
+              </div>
+              <div class="skill-bar">
+                <div
+                  class="skill-progress"
+                  data-progress="85"
+                  style="width: 0"
+                ></div>
+              </div>
+            </div>
+          </div>
+          <div class="skill-card">
+            <h3>Additional Skills</h3>
+            <div class="skill-item">
+              <div class="skill-name">
+                <span>Prompt Engineering</span>
+                <span>90%</span>
+              </div>
+              <div class="skill-bar">
+                <div
+                  class="skill-progress"
+                  data-progress="90"
+                  style="width: 0"
+                ></div>
+              </div>
+            </div>
+            <div class="skill-item">
+              <div class="skill-name">
+                <span>Web Testing</span>
+                <span>70%</span>
+              </div>
+              <div class="skill-bar">
+                <div
+                  class="skill-progress"
+                  data-progress="70"
+                  style="width: 0"
+                ></div>
+              </div>
+            </div>
+            <div class="skill-item">
+              <div class="skill-name">
+                <span>Problem Solving</span>
+                <span>85%</span>
+              </div>
+              <div class="skill-bar">
+                <div
+                  class="skill-progress"
+                  data-progress="85"
+                  style="width: 0"
+                ></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="projects" class="content-section">
+      <div class="container">
+        <h2 class="section-title">Projects</h2>
+        <div class="projects-grid">
+          <div class="project-card">
+            <img
+              src="https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=400&h=200&fit=crop"
+              alt="Inventory Management System"
+              class="project-image"
+            />
+            <div class="project-header">
+              <h3>Inventory Management System</h3>
+            </div>
+            <div class="project-body">
+              <p>
+                Developed a functional inventory management application to track
+                and manage product data with CRUD operations and real-time
+                search functionality.
+              </p>
+              <div class="challenge">
+                <strong>Challenge Solved:</strong> Implemented efficient data
+                filtering and sorting algorithms to handle large product
+                datasets smoothly.
+              </div>
+              <div class="tech-tags">
+                <span class="tag">HTML</span>
+                <span class="tag">CSS</span>
+                <span class="tag">JavaScript</span>
+                <span class="tag">Local Storage</span>
+              </div>
+              <div class="project-links">
+                <a
+                  href="#"
+                  onclick="
+                    alert('Add your live demo URL here');
+                    return false;
+                  "
+                  class="project-btn btn-live"
+                  >🚀 View Live</a
+                >
+                <a
+                  href="#"
+                  onclick="
+                    alert('Add your GitHub repository URL here');
+                    return false;
+                  "
+                  class="project-btn btn-code"
+                  >💻 View Code</a
+                >
+              </div>
+            </div>
+          </div>
+          <div class="project-card">
+            <img
+              src="https://images.unsplash.com/photo-1557821552-17105176677c?w=400&h=200&fit=crop"
+              alt="E-Commerce Storefront"
+              class="project-image"
+            />
+            <div class="project-header">
+              <h3>E-Commerce Storefront</h3>
+            </div>
+            <div class="project-body">
+              <p>
+                Created a responsive mock e-commerce website featuring product
+                listings, shopping cart functionality, and modern UI/UX design
+                principles with smooth animations.
+              </p>
+              <div class="challenge">
+                <strong>Challenge Solved:</strong> Built a dynamic shopping cart
+                with add/remove functionality and real-time price calculation
+                without using any frameworks.
+              </div>
+              <div class="tech-tags">
+                <span class="tag">HTML</span>
+                <span class="tag">Bootstrap 5</span>
+                <span class="tag">JavaScript</span>
+                <span class="tag">CSS Animations</span>
+              </div>
+              <div class="project-links">
+                <a
+                  href="#"
+                  onclick="
+                    alert('Add your live demo URL here');
+                    return false;
+                  "
+                  class="project-btn btn-live"
+                  >🚀 View Live</a
+                >
+                <a
+                  href="#"
+                  onclick="
+                    alert('Add your GitHub repository URL here');
+                    return false;
+                  "
+                  class="project-btn btn-code"
+                  >💻 View Code</a
+                >
+              </div>
+            </div>
+          </div>
+          <div class="project-card">
+            <img
+              src="https://images.unsplash.com/photo-1547658719-da2b51169166?w=400&h=200&fit=crop"
+              alt="Responsive Web Projects"
+              class="project-image"
+            />
+            <div class="project-header">
+              <h3>Portfolio Website Collection</h3>
+            </div>
+            <div class="project-body">
+              <p>
+                Built multiple responsive websites demonstrating proficiency in
+                modern CSS techniques, mobile-first design, cross-browser
+                compatibility, and accessibility standards.
+              </p>
+              <div class="challenge">
+                <strong>Challenge Solved:</strong> Achieved perfect
+                responsiveness across all devices using CSS Grid and Flexbox
+                with optimized performance scores.
+              </div>
+              <div class="tech-tags">
+                <span class="tag">HTML5</span>
+                <span class="tag">CSS3</span>
+                <span class="tag">Responsive Design</span>
+                <span class="tag">Accessibility</span>
+              </div>
+              <div class="project-links">
+                <a
+                  href="#"
+                  onclick="
+                    alert('Add your live demo URL here');
+                    return false;
+                  "
+                  class="project-btn btn-live"
+                  >🚀 View Live</a
+                >
+                <a
+                  href="#"
+                  onclick="
+                    alert('Add your GitHub repository URL here');
+                    return false;
+                  "
+                  class="project-btn btn-code"
+                  >💻 View Code</a
+                >
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="testimonials">
+      <div class="container">
+        <div class="testimonials-section">
+          <h2 class="section-title">Testimonials</h2>
+          <p
+            style="text-align: center; color: var(--gray); margin-bottom: 2rem"
+          >
+            * Add real testimonials or remove this section
+          </p>
+          <div class="testimonials-grid">
+            <div class="testimonial-card">
+              <p class="testimonial-text">
+                "Kem demonstrated exceptional problem-solving skills and
+                dedication in our Computer Science course. His frontend projects
+                showed creativity and attention to detail."
+              </p>
+              <p class="testimonial-author">Dr. Sokha Chan</p>
+              <p class="testimonial-role">Computer Science Professor, RUPP</p>
+            </div>
+            <div class="testimonial-card">
+              <p class="testimonial-text">
+                "Working with Kem on our group project was great. He's a strong
+                communicator and always willing to help team members understand
+                complex concepts."
+              </p>
+              <p class="testimonial-author">Sophea Nguon</p>
+              <p class="testimonial-role">Classmate & Project Partner</p>
+            </div>
+            <div class="testimonial-card">
+              <p class="testimonial-text">
+                "Kem's ability to quickly learn and implement new technologies
+                is impressive. His responsive design skills are top-notch for a
+                student developer."
+              </p>
+              <p class="testimonial-author">Raksa Pov</p>
+              <p class="testimonial-role">Study Group Leader</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- <section id="blog" class="content-section">
+      <div class="container">
+        <h2 class="section-title">Blog & Articles</h2>
+        <p style="text-align: center; color: var(--gray); margin-bottom: 2rem">
+          * Add your blog posts or remove this section
+        </p>
+        <div class="blog-grid">
+          <a
+            href="#"
+            onclick="
+              alert('Add your blog post URL here');
+              return false;
+            "
+            class="blog-card"
+          >
+            <div class="blog-date">January 15, 2025</div>
+            <h3>Understanding CSS Grid vs Flexbox</h3>
+            <p>
+              A comprehensive guide on when to use CSS Grid and when to use
+              Flexbox for your layouts, with practical examples and use cases.
+            </p>
+            <span class="read-more">Read More →</span>
+          </a>
+          <a
+            href="#"
+            onclick="
+              alert('Add your blog post URL here');
+              return false;
+            "
+            class="blog-card"
+          >
+            <div class="blog-date">January 8, 2025</div>
+            <h3>JavaScript ES6+ Features Every Developer Should Know</h3>
+            <p>
+              Exploring modern JavaScript features like arrow functions,
+              destructuring, spread operators, and more that make coding easier.
+            </p>
+            <span class="read-more">Read More →</span>
+          </a>
+          <a
+            href="#"
+            onclick="
+              alert('Add your blog post URL here');
+              return false;
+            "
+            class="blog-card"
+          >
+            <div class="blog-date">December 28, 2024</div>
+            <h3>Building Responsive Websites: Best Practices</h3>
+            <p>
+              Learn the essential techniques and strategies for creating
+              websites that look great on all devices and screen sizes.
+            </p>
+            <span class="read-more">Read More →</span>
+          </a>
+        </div>
+      </div>
+    </section> -->
+
+    <section id="contact">
+      <div class="container">
+        <div class="contact-section">
+          <h2>Let's Work Together</h2>
+          <p>
+            I'm currently seeking entry-level web development opportunities.
+            Feel free to reach out!
+          </p>
+          <div class="contact-content">
+            <form class="contact-form" id="contactForm">
+              <div class="form-group">
+                <label for="name">Your Name</label>
+                <input type="text" id="name" name="name" required />
+              </div>
+              <div class="form-group">
+                <label for="email">Your Email</label>
+                <input type="email" id="email" name="email" required />
+              </div>
+              <div class="form-group">
+                <label for="message">Your Message</label>
+                <textarea id="message" name="message" required></textarea>
+              </div>
+              <button type="submit" class="submit-btn">Send Message</button>
+              <div class="form-message" id="formMessage"></div>
+            </form>
+            <div class="contact-info">
+              <h3 style="color: var(--primary); margin-bottom: 1rem">
+                Contact Information
+              </h3>
+              <div class="contact-links">
+                <a href="mailto:kemdeth25@gmail.com" class="contact-link">
+                  <span class="contact-icon">📧</span>
+                  <div>
+                    <strong>Email</strong><br />
+                    kemdeth25@gmail.com
+                  </div>
+                </a>
+                <a
+                  href="https://github.com/kemdeth"
+                  target="_blank"
+                  class="contact-link"
+                >
+                  <span class="contact-icon">💻</span>
+                  <div>
+                    <strong>GitHub</strong><br />
+                    github.com/kemdeth
+                  </div>
+                </a>
+                <a
+                  href="https://linkedin.com/in/kemdeth"
+                  target="_blank"
+                  class="contact-link"
+                >
+                  <span class="contact-icon">💼</span>
+                  <div>
+                    <strong>LinkedIn</strong><br />
+                    linkedin.com/in/kemdeth
+                  </div>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <footer>
+      <div class="container">
+        <p>&copy; 2025 Kem Deth. Built with HTML, CSS & JavaScript.</p>
+      </div>
+    </footer>
+
+    <button class="back-to-top" id="backToTop" aria-label="Back to top">
+      ↑
+    </button>
+
+    <script>
+      // Theme Toggle
+      const themeToggle = document.getElementById("themeToggle");
+      const html = document.documentElement;
+
+      // Check for saved theme preference or default to light mode
+      const currentTheme = localStorage.getItem("theme") || "light";
+      html.setAttribute("data-theme", currentTheme);
+      themeToggle.textContent = currentTheme === "dark" ? "☀️" : "🌙";
+
+      themeToggle.addEventListener("click", () => {
+        const theme =
+          html.getAttribute("data-theme") === "light" ? "dark" : "light";
+        html.setAttribute("data-theme", theme);
+        localStorage.setItem("theme", theme);
+        themeToggle.textContent = theme === "dark" ? "☀️" : "🌙";
+      });
+
+      // Back to top button
+      const backToTopBtn = document.getElementById("backToTop");
+
+      window.addEventListener("scroll", () => {
+        if (window.pageYOffset > 300) {
+          backToTopBtn.classList.add("show");
+        } else {
+          backToTopBtn.classList.remove("show");
+        }
+      });
+
+      backToTopBtn.addEventListener("click", () => {
+        window.scrollTo({
+          top: 0,
+          behavior: "smooth",
+        });
+      });
+
+      // Intersection Observer for smooth section animations
+      const sections = document.querySelectorAll("section");
+
+      const observerOptions = {
+        threshold: 0.1,
+        rootMargin: "0px 0px -100px 0px",
+      };
+
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("visible");
+
+            // Animate skill bars when skills section is visible
+            if (entry.target.id === "skills") {
+              animateSkillBars();
+            }
+          }
+        });
+      }, observerOptions);
+
+      sections.forEach((section) => {
+        observer.observe(section);
+      });
+
+      // Initial animation for hero section
+      document.querySelector(".hero").classList.add("visible");
+
+      // Animate skill progress bars
+      function animateSkillBars() {
+        const skillBars = document.querySelectorAll(".skill-progress");
+        skillBars.forEach((bar) => {
+          const progress = bar.getAttribute("data-progress");
+          setTimeout(() => {
+            bar.style.width = progress + "%";
+          }, 200);
+        });
+      }
+
+      // Contact form submission
+      const contactForm = document.getElementById("contactForm");
+      const formMessage = document.getElementById("formMessage");
+
+      contactForm.addEventListener("submit", (e) => {
+        e.preventDefault();
+
+        // Show success message
+        formMessage.textContent =
+          "Note: This form is not connected to a backend. To enable email sending, integrate with Formspree, EmailJS, or your own backend service.";
+        formMessage.className = "form-message success";
+        formMessage.style.display = "block";
+
+        // Reset form
+        contactForm.reset();
+
+        // Hide message after 5 seconds
+        setTimeout(() => {
+          formMessage.style.display = "none";
+        }, 5000);
+      });
+
+      // Google Analytics (replace YOUR_GA_ID with your actual Google Analytics ID)
+      // Uncomment when you have your GA ID
+      /*
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'YOUR_GA_ID');
+      */
+    </script>
+
+    <!-- Google Analytics Script -->
+    <!-- Uncomment and replace YOUR_GA_ID when ready -->
+    <!-- <script async src="https://www.googletagmanager.com/gtag/js?id=YOUR_GA_ID"></script> -->
+  </body>
+</html>
