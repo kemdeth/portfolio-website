@@ -1,0 +1,411 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Space Grotesk", "Inter", ui-sans-serif, system-ui, sans-serif;
+
+  --color-neon: #22ff6e;
+  --color-neon-dark: #16c95a;
+  --color-neon-deep: #0a7a32;
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-white font-sans text-gray-800 antialiased transition-colors duration-300;
+  }
+
+  .dark body,
+  body.dark {
+    @apply bg-[#0b1120] text-gray-200;
+  }
+
+  ::selection {
+    @apply bg-neon/30 text-inherit;
+  }
+}
+
+@layer utilities {
+  .text-glow {
+    text-shadow: 0 0 20px rgb(34 255 110 / 0.45);
+  }
+  .card-surface {
+    @apply rounded-2xl border border-gray-200 bg-white shadow-sm transition-colors duration-300 dark:border-white/10 dark:bg-white/[0.04];
+  }
+  .input-base {
+    @apply w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-gray-800 placeholder-gray-400 outline-none transition focus:border-neon-deep focus:ring-2 focus:ring-neon/40 dark:border-white/15 dark:bg-white/5 dark:text-gray-100 dark:focus:border-neon;
+  }
+  .btn-primary {
+    @apply inline-flex items-center justify-center gap-2 rounded-lg bg-neon px-4 py-2 text-sm font-semibold text-black transition hover:bg-neon-dark focus:outline-none focus:ring-2 focus:ring-neon/50 disabled:cursor-not-allowed disabled:opacity-50;
+  }
+  .btn-ghost {
+    @apply inline-flex items-center justify-center gap-2 rounded-lg border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 transition hover:border-neon-deep hover:text-neon-deep dark:border-white/20 dark:text-gray-200 dark:hover:border-neon dark:hover:text-neon;
+  }
+  .scrollbar-hide {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+/* Orbit hero */
+.orbit-wrap {
+  --orbit: 440px;
+  --avatar: 200px;
+  --outer-ring: 396px;
+  --inner-ring: 270px;
+  --chip: 48px;
+  position: relative;
+  width: var(--orbit);
+  height: var(--orbit);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  isolation: isolate;
+}
+
+.orbit-ring {
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  border-radius: 50%;
+  border: 1.5px dashed rgb(34 197 94 / 0.25);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.orbit-ring-outer {
+  width: var(--outer-ring);
+  height: var(--outer-ring);
+}
+
+.orbit-ring-inner {
+  width: var(--inner-ring);
+  height: var(--inner-ring);
+  border-color: rgb(34 197 94 / 0.35);
+}
+
+/* Floating tech chips — glassmorphism cards with hover scale + tooltip */
+.orbit-item {
+  --angle: 0deg;
+  --radius: 0px;
+  --duration: 20s;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: var(--chip);
+  height: var(--chip);
+  margin: calc(var(--chip) / -2) 0 0 calc(var(--chip) / -2);
+  animation: orbit var(--duration) linear infinite;
+  z-index: 5;
+  cursor: default;
+}
+
+.orbit-item:hover {
+  z-index: 30;
+}
+
+.orbit-chip {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.92);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.8);
+  box-shadow: 0 4px 14px rgb(0 0 0 / 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.25s ease, box-shadow 0.25s ease, background-color 0.25s ease;
+}
+
+.orbit-item:hover .orbit-chip {
+  transform: scale(1.22);
+  background-color: #fff;
+  box-shadow:
+    0 0 0 4px rgb(34 197 94 / 0.22),
+    0 10px 26px rgb(34 197 94 / 0.4);
+}
+
+.orbit-ring-outer .orbit-item {
+  --radius: calc(var(--outer-ring) / 2);
+  --duration: 30s;
+}
+
+.orbit-ring-inner .orbit-item {
+  --radius: calc(var(--inner-ring) / 2);
+  --duration: 22s;
+  animation-direction: reverse;
+}
+
+.orbit-item svg {
+  width: 25px;
+  height: 25px;
+  transition: transform 0.25s ease;
+}
+
+.orbit-item:hover svg {
+  transform: scale(1.08);
+}
+
+.orbit-tooltip {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 50%;
+  transform: translateX(-50%) translateY(-6px);
+  white-space: nowrap;
+  background: #0b1120;
+  color: #fff;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  padding: 5px 11px;
+  border-radius: 9999px;
+  box-shadow: 0 8px 22px rgb(0 0 0 / 0.35);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+  z-index: 50;
+}
+
+.orbit-item:hover .orbit-tooltip {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+/* Avatar — larger, glowing pulse aura on hover */
+.orbit-aura {
+  position: absolute;
+  width: calc(var(--avatar) + 30px);
+  height: calc(var(--avatar) + 30px);
+  border-radius: 50%;
+  background: radial-gradient(circle, rgb(34 197 94 / 0.35) 0%, transparent 70%);
+  z-index: 1;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+
+.orbit-wrap:hover .orbit-aura {
+  opacity: 1;
+  animation: pulse-aura 2.2s ease-in-out infinite;
+}
+
+.orbit-avatar {
+  position: relative;
+  z-index: 10;
+  width: var(--avatar);
+  height: var(--avatar);
+  border-radius: 50%;
+  overflow: hidden;
+  border: 4px solid #22c55e;
+  box-shadow: 0 10px 25px -5px rgb(0 0 0 / 0.12);
+  transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.orbit-avatar:hover {
+  transform: scale(1.05);
+  border-color: #22ff6e;
+  box-shadow:
+    0 0 0 5px rgb(34 197 94 / 0.22),
+    0 0 34px rgb(34 197 94 / 0.65),
+    0 18px 42px rgb(0 0 0 / 0.18);
+}
+
+.orbit-avatar img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center top;
+}
+
+@keyframes orbit {
+  from {
+    transform: rotate(var(--angle)) translateX(var(--radius))
+      rotate(calc(-1 * var(--angle)));
+  }
+  to {
+    transform: rotate(calc(var(--angle) + 360deg)) translateX(var(--radius))
+      rotate(calc(-1 * (var(--angle) + 360deg)));
+  }
+}
+
+@keyframes pulse-aura {
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 0.55;
+  }
+  50% {
+    transform: scale(1.12);
+    opacity: 1;
+  }
+}
+
+@media (max-width: 767px) {
+  .orbit-wrap {
+    --avatar: 155px;
+    --outer-ring: 330px;
+    --inner-ring: 226px;
+    --orbit: 370px;
+  }
+}
+
+@media (max-width: 520px) {
+  .orbit-wrap {
+    --avatar: 138px;
+    --outer-ring: 292px;
+    --inner-ring: 200px;
+    --chip: 44px;
+    --orbit: 330px;
+  }
+}
+
+@media (max-width: 360px) {
+  .orbit-wrap {
+    --avatar: 124px;
+    --outer-ring: 262px;
+    --inner-ring: 180px;
+    --chip: 40px;
+    --orbit: 300px;
+  }
+  .orbit-item svg {
+    width: 20px;
+    height: 20px;
+  }
+}
+
+/* ===== Kem AI Assistant chat widget ===== */
+@layer components {
+  .markdown-body {
+    @apply text-sm leading-relaxed;
+  }
+  .markdown-body > :first-child {
+    @apply mt-0;
+  }
+  .markdown-body > :last-child {
+    @apply mb-0;
+  }
+  .markdown-body p {
+    @apply mb-2;
+  }
+  .markdown-body ul {
+    @apply mb-2 list-disc space-y-0.5 pl-5;
+  }
+  .markdown-body ol {
+    @apply mb-2 list-decimal space-y-0.5 pl-5;
+  }
+  .markdown-body h1,
+  .markdown-body h2,
+  .markdown-body h3,
+  .markdown-body h4 {
+    @apply mb-1.5 mt-3 font-semibold;
+  }
+  .markdown-body blockquote {
+    @apply my-2 border-l-2 border-neon/60 pl-3 italic;
+  }
+  .markdown-body code {
+    @apply font-mono;
+  }
+  .markdown-body table {
+    @apply my-2 w-full border-collapse text-xs;
+  }
+  .markdown-body th,
+  .markdown-body td {
+    @apply border border-slate-300 px-2 py-1 dark:border-slate-700;
+  }
+}
+
+/* Typing indicator — three pulsing dots */
+@keyframes typing-bounce {
+  0%,
+  60%,
+  100% {
+    transform: translateY(0);
+    opacity: 0.4;
+  }
+  30% {
+    transform: translateY(-4px);
+    opacity: 1;
+  }
+}
+.typing-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 9999px;
+  background: currentColor;
+  animation: typing-bounce 1.2s infinite ease-in-out;
+}
+.typing-dot:nth-child(2) {
+  animation-delay: 0.15s;
+}
+.typing-dot:nth-child(3) {
+  animation-delay: 0.3s;
+}
+
+/* Floating trigger — pulsing green glow ring */
+@keyframes chat-glow-pulse {
+  0%,
+  100% {
+    box-shadow:
+      0 0 0 0 rgb(34 255 110 / 0.55),
+      0 8px 24px rgb(34 255 110 / 0.35);
+  }
+  50% {
+    box-shadow:
+      0 0 0 14px rgb(34 255 110 / 0),
+      0 8px 24px rgb(34 255 110 / 0.35);
+  }
+}
+.chat-glow {
+  animation: chat-glow-pulse 2.4s ease-in-out infinite;
+}
+
+/* ---- Skills / Tech Toolbox ---- */
+
+/* Glassmorphism container for each skill category card */
+.skill-card {
+  @apply rounded-2xl border border-slate-200 bg-white/70 shadow-lg backdrop-blur-md transition-colors duration-300 dark:border-slate-800 dark:bg-white/[0.04];
+}
+.skill-card:hover {
+  border-color: rgb(52 211 153 / 0.5);
+}
+
+/* Per-skill row: --brand is set inline from the skill's brand color */
+.skill-row {
+  --brand: #22ff6e;
+}
+
+/* Icon badge: colored with the brand color, glows + scales on row hover */
+.skill-icon {
+  color: var(--brand);
+  transition:
+    color 0.3s ease,
+    border-color 0.3s ease,
+    box-shadow 0.3s ease,
+    transform 0.3s ease,
+    background-color 0.3s ease;
+}
+.skill-row:hover .skill-icon {
+  border-color: var(--brand);
+  background-color: color-mix(in srgb, var(--brand) 12%, transparent);
+  box-shadow:
+    0 0 0 1px var(--brand),
+    0 10px 26px -10px var(--brand);
+  transform: scale(1.08);
+}
+/* Near-black brands (e.g. GitHub) get a light variant so they stay visible on dark cards.
+   Overriding --brand here makes the icon color AND the hover glow both go light. */
+.dark .skill-row[data-brand='dark-variant'] {
+  --brand: #f0f6fc;
+}

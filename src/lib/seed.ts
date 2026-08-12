@@ -1,0 +1,172 @@
+import type { SiteData } from '@/lib/types'
+
+export const SEED: SiteData = {
+  profile: {
+    name: 'Kem Deth',
+    headline: 'Frontend Developer',
+    location: 'Phnom Penh, Cambodia',
+    email: 'kemdeth25@gmail.com',
+    resumeUrl: '/cv/KemDethLive.pdf',
+    avatarUrl: '/image/KemDeth.png',
+    aboutPhotoUrl: '/image/kemdeth_about_me-removebg-preview.png',
+    github: 'https://github.com/kemdeth',
+    linkedin: 'https://linkedin.com/in/kemdeth',
+    telegram: 'https://t.me/KEMDETH',
+    intro: [
+      "I'm an enthusiastic Frontend Developer with a passion for creating responsive, user-friendly websites. Currently pursuing my Computer Science degree at the Royal University of Phnom Penh, I build real projects every day to sharpen my craft.",
+      'My approach blends technical precision with creative instinct. I love the moment a design clicks into place in the browser — clean, fast, and accessible to everyone.',
+      "I'm actively looking for entry-level roles and internships where I can contribute meaningfully and grow alongside a great team.",
+    ],
+    typingPhrases: [
+      'Frontend Developer',
+      'Building Warm, Creative UIs',
+      'JavaScript Enthusiast',
+      'Mobile-First Mindset',
+      'Open to Opportunities',
+    ],
+    heroStats: [
+      { value: '2+', label: 'Years Coding' },
+      { value: '3', label: 'Projects Built' },
+      { value: '600+', label: 'Hours Learned' },
+    ],
+    education: [
+      {
+        school: 'Royal University of Phnom Penh',
+        degree: "Bachelor's Degree in Computer Science",
+        dates: '2024 — Present',
+      },
+    ],
+    softSkills: [
+      'Communication',
+      'Teamwork',
+      'Time Management',
+      'Problem Solving',
+      'Quick Learner',
+      'Adaptability',
+    ],
+    availability: 'Open to opportunities',
+    responseTime: 'Within 24 hours',
+  },
+  skills: [
+    { id: 's-01', category: 'Frontend Core', name: 'HTML5', level: 90 },
+    { id: 's-02', category: 'Frontend Core', name: 'CSS3', level: 85 },
+    { id: 's-03', category: 'Frontend Core', name: 'JavaScript (ES6+)', level: 75 },
+    { id: 's-04', category: 'Frontend Core', name: 'TypeScript', level: 70 },
+    { id: 's-05', category: 'Frontend Core', name: 'React', level: 75 },
+    { id: 's-06', category: 'Frontend Core', name: 'Tailwind CSS', level: 80 },
+    { id: 's-07', category: 'Frontend Core', name: 'Bootstrap 5', level: 72 },
+    { id: 's-08', category: 'Frontend Core', name: 'Responsive / Mobile-First', level: 88 },
+    { id: 's-09', category: 'Tools & Workflow', name: 'Git & GitHub', level: 80 },
+    { id: 's-10', category: 'Tools & Workflow', name: 'VS Code', level: 92 },
+    { id: 's-11', category: 'Tools & Workflow', name: 'Browser DevTools', level: 78 },
+    { id: 's-12', category: 'Tools & Workflow', name: 'Figma (basics)', level: 60 },
+    { id: 's-13', category: 'Tools & Workflow', name: 'PHP', level: 72 },
+    { id: 's-14', category: 'Tools & Workflow', name: 'Laravel (basics)', level: 60 },
+    { id: 's-15', category: 'Other Skills', name: 'Prompt Engineering', level: 90 },
+    { id: 's-16', category: 'Other Skills', name: 'Web Accessibility (a11y)', level: 70 },
+    { id: 's-17', category: 'Other Skills', name: 'Web Testing', level: 70 },
+    { id: 's-18', category: 'Other Skills', name: 'Problem Solving', level: 80 },
+  ],
+  projects: [
+    {
+      id: 'p-01',
+      title: 'Personal Portfolio Website',
+      description:
+        'A fully custom dark-mode frontend built with pure HTML, CSS & JavaScript. Features smooth scroll-reveal animations, a serverless Telegram contact form, dark/light theme toggle, and a 95+ Lighthouse score.',
+      challenge:
+        'Secured the contact form by moving the Telegram bot token server-side — zero secrets exposed in the frontend.',
+      tags: ['HTML5', 'CSS3', 'JavaScript', 'Netlify', 'Serverless'],
+      image: '/ProjectImage/portfolio.png',
+      liveUrl: 'https://kem-deth.netlify.app',
+      sourceUrl: 'https://github.com/kemdeth/portfolio-website',
+      featured: true,
+      status: 'Live',
+      order: 1,
+    },
+    {
+      id: 'p-02',
+      title: 'E-Commerce Storefront',
+      description:
+        'A responsive mock storefront with product listings, a dynamic cart, and smooth CSS animations — zero frameworks used.',
+      challenge:
+        'Real-time cart with add/remove & price recalculation using pure DOM manipulation.',
+      tags: ['HTML', 'Bootstrap 5', 'JavaScript', 'CSS Animations'],
+      image: "/ProjectImage/E-Commerce Storefront.png",
+      liveUrl: 'https://e-commerce-fronstore.netlify.app/',
+      sourceUrl: 'https://github.com/kemdeth/E-Commerce-Storefront',
+      featured: true,
+      status: 'Live',
+      order: 2,
+    },
+    {
+      id: 'p-03',
+      title: 'Ask Kem — AI Portfolio Assistant',
+      description:
+        'A Gemini-powered chat assistant embedded in this portfolio. Visitors can ask about my skills, projects, and availability — getting instant answers 24/7 without leaving the page.',
+      challenge:
+        'Gemini API key kept server-side via Netlify Function — zero secrets in the browser. Conversation history managed client-side for smooth multi-turn chat.',
+      tags: ['HTML', 'CSS', 'JavaScript', 'Node.js', 'Gemini AI', 'Netlify'],
+      image: "/ProjectImage/Kem's assistant.png",
+      liveUrl: 'https://ask-kem-bot.netlify.app',
+      sourceUrl: 'https://github.com/kemdeth/ask-kem-bot',
+      featured: true,
+      status: 'Live',
+      order: 3,
+    },
+  ],
+  certificates: [
+    { id: 'c-01', name: 'Responsive Web Design', issuer: 'freeCodeCamp', year: '2024' },
+    { id: 'c-02', name: 'JavaScript Algorithms', issuer: 'freeCodeCamp', year: '2024' },
+    { id: 'c-03', name: 'Web Development Bootcamp', issuer: 'Udemy', year: '2024' },
+    { id: 'c-04', name: 'Git & GitHub Essentials', issuer: 'Coursera', year: '2024' },
+  ],
+  testimonials: [
+    {
+      id: 't-01',
+      name: 'Dr. Sokha Chan',
+      role: 'CS Professor, RUPP',
+      quote:
+        'Kem demonstrated exceptional problem-solving skills and dedication. His frontend projects showed creativity and real attention to detail — impressive for a first-year student.',
+      avatar: '/testimonials/images/Dr. Sokha Chan.png',
+      rating: 5,
+    },
+    {
+      id: 't-02',
+      name: 'Sophea Nguon',
+      role: 'Classmate & Project Partner',
+      quote:
+        "Working with Kem on our group project was great. He's a strong communicator and always willing to help team members through complex concepts patiently.",
+      avatar: '/testimonials/images/Sophea Nguon.jpg',
+      rating: 5,
+    },
+    {
+      id: 't-03',
+      name: 'Raksa Pov',
+      role: 'Study Group Leader',
+      quote:
+        "Kem's ability to quickly learn and implement new technologies is impressive. His responsive design skills stand out — clean code, easy to read and maintain.",
+      avatar: '/testimonials/images/Raksa Pov.png',
+      rating: 5,
+    },
+  ],
+  messages: [
+    {
+      id: 'm-01',
+      name: 'TechHR Solutions',
+      email: 'hello@techhr.example',
+      subject: 'Junior Frontend Role',
+      body: "Hi Kem, we saw your portfolio and would love to chat about a junior frontend position. Are you available for a call this week?",
+      createdAt: '2026-07-28T09:15:00.000Z',
+      read: false,
+    },
+    {
+      id: 'm-02',
+      name: 'Nara Mey',
+      email: 'nara.mey@example.com',
+      subject: 'Freelance inquiry',
+      body: 'I need a small landing page for my coffee shop. Can you help? Here is my phone number, please reach out.',
+      createdAt: '2026-08-02T14:40:00.000Z',
+      read: true,
+    },
+  ],
+}

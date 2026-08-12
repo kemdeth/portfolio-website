@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://kem-deth.netlify.app/sitemap.xml
