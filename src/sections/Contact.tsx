@@ -1,9 +1,11 @@
-import { useState, type FormEvent } from 'react'
+import { useRef, useState, type FormEvent } from 'react'
 import { Copy, Mail, MapPin, Send, Timer, CheckCircle2 } from 'lucide-react'
-import { useData } from '@/context/DataContext'
-import { useToast } from '@/context/ToastContext'
+import { useData } from '@/context/useData'
+import { useToast } from '@/context/useToast'
 import { copyToClipboard } from '@/lib/clipboard'
-import { sendContactMessage } from '@/lib/contact'
+import { ContactError, sendContactMessage } from '@/lib/contact'
+import { MIN_FORM_TIME_MS } from '@/lib/captcha'
+import { BotCheck, type BotCheckHandle } from '@/components/BotCheck'
 import { Reveal } from '@/components/Reveal'
 import { SectionHeading } from '@/components/SectionHeading'
 import { GithubIcon, LinkedinIcon, TelegramIcon } from '@/components/SocialIcons'
@@ -14,10 +16,12 @@ export function Contact() {
   const p = data.profile
   const [sending, setSending] = useState(false)
   const [sent, setSent] = useState(false)
+  const botRef = useRef<BotCheckHandle>(null)
+  const startedAtRef = useRef(Date.now())
 
   const handleCopy = async (value: string, label: string) => {
     const ok = await copyToClipboard(value)
-    if (ok) toast(`${label} copied to clipboard! 📋`)
+    if (ok) toast(`${label} copied to clipboard!`)
     else toast('Could not copy to clipboard.', 'error')
   }
 
@@ -29,6 +33,14 @@ export function Contact() {
     const email = String(fd.get('email') ?? '').trim()
     const subject = String(fd.get('subject') ?? '').trim()
     const body = String(fd.get('message') ?? '').trim()
+    const website = String(fd.get('website') ?? '').trim()
+    const botToken = botRef.current?.getToken() ?? null
+
+    // Honeypot - real visitors never fill this hidden field. Silently drop bots.
+    if (website) {
+      form.reset()
+      return
+    }
 
     if (!name || !email || !body) {
       toast('Please fill in all required fields.', 'error')
@@ -38,28 +50,51 @@ export function Contact() {
       toast('Please enter a valid email address.', 'error')
       return
     }
+    if (Date.now() - startedAtRef.current < MIN_FORM_TIME_MS) {
+      toast('Please take a moment before sending.', 'error')
+      return
+    }
+    if (!botToken) {
+      toast('Please complete the "I am not a robot" check first.', 'error')
+      return
+    }
 
     setSending(true)
     try {
+      await sendContactMessage({
+        name,
+        email,
+        subject: subject || undefined,
+        body,
+        createdAt: new Date().toISOString(),
+        botToken,
+        honeypot: website,
+        formStartedAt: new Date(startedAtRef.current).toISOString(),
+      })
       await addMessage({ name, email, subject: subject || undefined, body })
       form.reset()
+      botRef.current?.reset()
       setSent(true)
       setTimeout(() => setSent(false), 6000)
-
-      try {
-        await sendContactMessage({
-          name,
-          email,
-          subject: subject || undefined,
-          body,
-          createdAt: new Date().toISOString(),
-        })
-        toast('Message sent successfully! 🚀 I usually reply within 24 hours.')
-      } catch {
-        toast('Message saved locally, but cloud delivery failed.', 'error')
+      toast('Message sent successfully! I usually reply within 24 hours.')
+    } catch (err) {
+      if (err instanceof ContactError && err.status === 429) {
+        toast('Too many messages from you. Please try again later.', 'error')
+      } else if (err instanceof ContactError && err.status === 400) {
+        toast('Verification failed. Please complete the "I am not a robot" check.', 'error')
+      } else {
+        // Local dev or server function unavailable — persist to local state so message appears in inbox
+        try {
+          await addMessage({ name, email, subject: subject || undefined, body })
+          form.reset()
+          botRef.current?.reset()
+          setSent(true)
+          setTimeout(() => setSent(false), 6000)
+          toast('Message sent successfully! Saved to inbox.')
+        } catch {
+          toast('Something went wrong. Please try again.', 'error')
+        }
       }
-    } catch {
-      toast('Something went wrong. Please try again.', 'error')
     } finally {
       setSending(false)
     }
@@ -157,7 +192,19 @@ export function Contact() {
           </Reveal>
 
           <Reveal delay={0.1} className="lg:col-span-3">
-            <form onSubmit={handleSubmit} className="card-surface p-6 sm:p-8">
+            <form onSubmit={handleSubmit} className="card-surface relative p-6 sm:p-8">
+              {/* Honeypot field - hidden from humans, filled by naive bots. */}
+              <div aria-hidden="true" className="absolute -left-[9999px] top-auto h-px w-px overflow-hidden">
+                <label htmlFor="website">Website</label>
+                <input
+                  id="website"
+                  name="website"
+                  type="text"
+                  tabIndex={-1}
+                  autoComplete="off"
+                />
+              </div>
+
               <div className="grid gap-4 sm:grid-cols-2">
                 <div>
                   <label htmlFor="name" className="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-200">
@@ -190,6 +237,10 @@ export function Contact() {
                   className="input-base resize-y"
                   placeholder="Tell me about your project or idea..."
                 />
+              </div>
+
+              <div className="mt-5">
+                <BotCheck ref={botRef} theme="auto" />
               </div>
 
               <div className="mt-5 flex items-center justify-between gap-4">

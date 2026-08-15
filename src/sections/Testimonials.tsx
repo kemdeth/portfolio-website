@@ -1,5 +1,5 @@
-import { Quote, Star } from 'lucide-react'
-import { useData } from '@/context/DataContext'
+﻿import { Quote, Star } from 'lucide-react'
+import { useData } from '@/context/useData'
 import { Reveal } from '@/components/Reveal'
 import { SectionHeading } from '@/components/SectionHeading'
 

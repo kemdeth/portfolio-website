@@ -1,7 +1,7 @@
 import { useState, type FormEvent } from 'react'
 import { FolderGit2, Pencil, Plus, Trash2 } from 'lucide-react'
-import { useData } from '@/context/DataContext'
-import { useToast } from '@/context/ToastContext'
+import { useData } from '@/context/useData'
+import { useToast } from '@/context/useToast'
 import { Modal } from '@/components/admin/Modal'
 import { ConfirmDialog } from '@/components/admin/ConfirmDialog'
 import { ImageInput } from '@/components/admin/ImageInput'
@@ -80,13 +80,17 @@ export default function Projects() {
   const [deleting, setDeleting] = useState<Project | null>(null)
   const [saving, setSaving] = useState(false)
 
-  const openNew = () =>
+  const openNew = () => {
     setEditing({ ...EMPTY, id: nextId('p'), order: data.projects.length + 1 })
-  const openEdit = (project: Project) => setEditing(structuredClone(project))
+  }
+  const openEdit = (project: Project) => {
+    setEditing(structuredClone(project))
+  }
 
-  const handleSave = async (e: FormEvent) => {
+  const handleSave = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     if (!editing) return
+
     setSaving(true)
     await upsertProject(editing)
     setSaving(false)

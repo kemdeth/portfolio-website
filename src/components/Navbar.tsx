@@ -1,7 +1,7 @@
-import { useEffect, useState } from 'react'
+﻿import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { Menu, X } from 'lucide-react'
-import { useData } from '@/context/DataContext'
+import { useData } from '@/context/useData'
 import { ThemeToggle } from '@/components/ThemeToggle'
 import { GithubIcon, LinkedinIcon, TelegramIcon } from '@/components/SocialIcons'
 import { cn } from '@/lib/utils'
@@ -28,7 +28,7 @@ export function Navbar() {
     return () => window.removeEventListener('scroll', onScroll)
   }, [])
 
-  // ScrollSpy — highlight the navbar link for the section currently in view.
+  // ScrollSpy - highlight the navbar link for the section currently in view.
   useEffect(() => {
     const sections = NAV_LINKS.map((l) => document.getElementById(l.href.slice(1))).filter(
       (el): el is HTMLElement => Boolean(el),

@@ -1,7 +1,7 @@
-import { motion, useReducedMotion } from 'framer-motion'
+﻿import { motion, useReducedMotion } from 'framer-motion'
 import { ArrowDown, Download } from 'lucide-react'
-import { useData } from '@/context/DataContext'
-import { useToast } from '@/context/ToastContext'
+import { useData } from '@/context/useData'
+import { useToast } from '@/context/useToast'
 import { OrbitHero } from '@/components/OrbitHero'
 import { TypeWriter } from '@/components/TypeWriter'
 import { GithubIcon, LinkedinIcon, TelegramIcon } from '@/components/SocialIcons'
@@ -62,7 +62,7 @@ export function Hero() {
               href={p.resumeUrl}
               target="_blank"
               rel="noopener noreferrer"
-              onClick={() => toast('Resume download started! 📄')}
+              onClick={() => toast('Resume download started!')}
               className="btn-ghost"
             >
               <Download className="h-4 w-4" />
@@ -104,7 +104,7 @@ export function Hero() {
           transition={{ duration: 0.6, delay: 0.15 }}
           className="order-1 flex justify-center lg:order-2"
         >
-          <OrbitHero avatarSrc={p.avatarUrl} avatarAlt={`${p.name} — ${p.headline}`} />
+          <OrbitHero avatarSrc={p.avatarUrl} avatarAlt={`${p.name} - ${p.headline}`} />
         </motion.div>
       </div>
     </section>

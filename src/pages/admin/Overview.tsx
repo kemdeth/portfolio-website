@@ -7,7 +7,7 @@ import {
   Wrench,
   ExternalLink,
 } from 'lucide-react'
-import { useData } from '@/context/DataContext'
+import { useData } from '@/context/useData'
 import { timeAgo } from '@/lib/utils'
 
 export default function Overview() {
@@ -18,12 +18,12 @@ export default function Overview() {
     {
       label: 'Projects',
       value: data.projects.length,
-      to: '/admin/dashboard/projects',
+      to: '/admin/projects',
       icon: FolderGit2,
     },
-    { label: 'Certificates', value: data.certificates.length, to: '/admin/dashboard/certificates', icon: Award },
-    { label: 'Skills', value: data.skills.length, to: '/admin/dashboard/skills', icon: Wrench },
-    { label: 'Messages', value: `${data.messages.length}`, sub: unread > 0 ? `${unread} unread` : 'all read', to: '/admin/dashboard/messages', icon: MessageSquare },
+    { label: 'Certificates', value: data.certificates.length, to: '/admin/certificates', icon: Award },
+    { label: 'Skills', value: data.skills.length, to: '/admin/skills', icon: Wrench },
+    { label: 'Messages', value: `${data.messages.length}`, sub: unread > 0 ? `${unread} unread` : 'all read', to: '/admin/messages', icon: MessageSquare },
   ]
 
   const recentMessages = [...data.messages]
@@ -96,7 +96,7 @@ export default function Overview() {
             ))}
           </div>
           <Link
-            to="/admin/dashboard/messages"
+            to="/admin/messages"
             className="mt-4 inline-flex items-center gap-1.5 text-sm font-medium text-neon-deep transition hover:underline dark:text-neon"
           >
             View all messages <ExternalLink className="h-3.5 w-3.5" />
@@ -142,7 +142,7 @@ export default function Overview() {
               </div>
             </div>
             <Link
-              to="/admin/dashboard/profile"
+              to="/admin/profile"
               className="inline-flex items-center gap-1.5 rounded-lg border border-gray-300 px-3 py-1.5 text-xs font-medium text-gray-700 transition hover:border-neon-deep hover:text-neon-deep dark:border-white/20 dark:text-gray-200 dark:hover:border-neon dark:hover:text-neon"
             >
               <User className="h-3.5 w-3.5" /> Edit profile

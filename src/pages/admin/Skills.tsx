@@ -1,7 +1,7 @@
 import { useMemo, useState, type FormEvent } from 'react'
 import { Pencil, Plus, Trash2, Wrench } from 'lucide-react'
-import { useData } from '@/context/DataContext'
-import { useToast } from '@/context/ToastContext'
+import { useData } from '@/context/useData'
+import { useToast } from '@/context/useToast'
 import { Modal } from '@/components/admin/Modal'
 import { ConfirmDialog } from '@/components/admin/ConfirmDialog'
 import type { Skill } from '@/lib/types'
@@ -28,13 +28,17 @@ export default function Skills() {
     }))
   }, [categories, data.skills])
 
-  const openNew = (category: string) =>
+  const openNew = (category: string) => {
     setEditing({ ...EMPTY, id: nextId('s'), category })
-  const openEdit = (skill: Skill) => setEditing(structuredClone(skill))
+  }
+  const openEdit = (skill: Skill) => {
+    setEditing(structuredClone(skill))
+  }
 
-  const handleSave = async (e: FormEvent) => {
+  const handleSave = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     if (!editing) return
+
     setSaving(true)
     await upsertSkill(editing)
     setSaving(false)

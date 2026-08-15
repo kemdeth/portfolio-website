@@ -1,5 +1,5 @@
-import { BadgeCheck, GraduationCap, Heart } from 'lucide-react'
-import { useData } from '@/context/DataContext'
+﻿import { BadgeCheck, GraduationCap, Heart } from 'lucide-react'
+import { useData } from '@/context/useData'
 import { Reveal } from '@/components/Reveal'
 import { SectionHeading } from '@/components/SectionHeading'
 
@@ -91,7 +91,7 @@ export function About() {
                         {cert.name}
                         <span className="text-gray-400 dark:text-gray-500">
                           {' '}
-                          — {cert.issuer}
+                          - {cert.issuer}
                         </span>
                       </span>
                     </li>

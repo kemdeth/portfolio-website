@@ -1,36 +1,8 @@
-import { createContext, useContext, useEffect, useMemo, useState, type ReactNode } from 'react'
-import type {
-  Certificate,
-  Message,
-  Profile,
-  Project,
-  SiteData,
-  Skill,
-  Testimonial,
-} from '@/lib/types'
+import { useEffect, useMemo, useState, type ReactNode } from 'react'
+import type { SiteData } from '@/lib/types'
 import { createAdapter } from '@/lib/storage'
 import { uid } from '@/lib/utils'
-
-interface DataContextValue {
-  data: SiteData
-  loading: boolean
-  resetData: () => Promise<void>
-  updateProfile: (profile: Profile) => Promise<void>
-  upsertSkill: (skill: Skill) => Promise<void>
-  removeSkill: (id: string) => Promise<void>
-  upsertProject: (project: Project) => Promise<void>
-  removeProject: (id: string) => Promise<void>
-  upsertCertificate: (certificate: Certificate) => Promise<void>
-  removeCertificate: (id: string) => Promise<void>
-  upsertTestimonial: (testimonial: Testimonial) => Promise<void>
-  removeTestimonial: (id: string) => Promise<void>
-  addMessage: (message: Omit<Message, 'id' | 'createdAt' | 'read'>) => Promise<void>
-  setMessageRead: (id: string, read: boolean) => Promise<void>
-  removeMessage: (id: string) => Promise<void>
-  nextId: (prefix: string) => string
-}
-
-const DataContext = createContext<DataContextValue | null>(null)
+import { DataContext, type DataContextValue } from '@/context/dataContextValue'
 
 export function DataProvider({ children }: { children: ReactNode }) {
   const [data, setData] = useState<SiteData | null>(null)
@@ -46,8 +18,21 @@ export function DataProvider({ children }: { children: ReactNode }) {
         setLoading(false)
       }
     })()
+
+    const handleStorage = async (e: StorageEvent) => {
+      if (!e.key || e.key === 'portfolio:data:v1') {
+        const adapter = createAdapter()
+        const reloaded = await adapter.load()
+        if (alive) {
+          setData(reloaded)
+        }
+      }
+    }
+
+    window.addEventListener('storage', handleStorage)
     return () => {
       alive = false
+      window.removeEventListener('storage', handleStorage)
     }
   }, [])
 
@@ -176,6 +161,13 @@ export function DataProvider({ children }: { children: ReactNode }) {
           })
           resolve()
         }),
+      setMessages: (messages) =>
+        new Promise<void>((resolve) => {
+          mutate((d) => {
+            d.messages = messages
+          })
+          resolve()
+        }),
       nextId,
     }
   }, [data, loading, persist])
@@ -189,10 +181,4 @@ export function DataProvider({ children }: { children: ReactNode }) {
   }
 
   return <DataContext.Provider value={value}>{children}</DataContext.Provider>
-}
-
-export function useData(): DataContextValue {
-  const ctx = useContext(DataContext)
-  if (!ctx) throw new Error('useData must be used within a DataProvider')
-  return ctx
 }

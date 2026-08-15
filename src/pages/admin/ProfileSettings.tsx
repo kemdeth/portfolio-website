@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { CheckCircle2, Loader2, Plus, Trash2 } from 'lucide-react'
-import { useData } from '@/context/DataContext'
+import { useData } from '@/context/useData'
 import { ImageInput } from '@/components/admin/ImageInput'
 import type { Profile } from '@/lib/types'
 
@@ -20,7 +20,7 @@ export default function ProfileSettings() {
     setForm((f) => ({ ...f, [key]: value }))
   }
 
-  // Debounced autosave — persists to localStorage & updates the live site instantly
+  // Debounced autosave - persists to localStorage & updates the live site instantly
   useEffect(() => {
     if (firstRender.current) {
       firstRender.current = false
@@ -107,7 +107,7 @@ export default function ProfileSettings() {
           Avatar & Photos
         </h2>
         <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">
-          Upload an image file or paste a URL — changes save automatically.
+          Upload an image file or paste a URL - changes save automatically.
         </p>
         <div className="mt-4 grid gap-6 sm:grid-cols-2">
           <ImageInput
@@ -317,7 +317,7 @@ export default function ProfileSettings() {
               <input
                 value={edu.dates}
                 aria-label="Dates"
-                placeholder="2024 — Present"
+                placeholder="2024 - Present"
                 onChange={(e) => {
                   const education = [...form.education]
                   education[i] = { ...education[i], dates: e.target.value }

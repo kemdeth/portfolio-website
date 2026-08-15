@@ -1,7 +1,7 @@
 import { useState, type FormEvent } from 'react'
 import { Award, ExternalLink, Pencil, Plus, Trash2 } from 'lucide-react'
-import { useData } from '@/context/DataContext'
-import { useToast } from '@/context/ToastContext'
+import { useData } from '@/context/useData'
+import { useToast } from '@/context/useToast'
 import { Modal } from '@/components/admin/Modal'
 import { ConfirmDialog } from '@/components/admin/ConfirmDialog'
 import { ImageInput } from '@/components/admin/ImageInput'
@@ -16,12 +16,17 @@ export default function Certificates() {
   const [deleting, setDeleting] = useState<Certificate | null>(null)
   const [saving, setSaving] = useState(false)
 
-  const openNew = () => setEditing({ ...EMPTY, id: nextId('c') })
-  const openEdit = (cert: Certificate) => setEditing(structuredClone(cert))
+  const openNew = () => {
+    setEditing({ ...EMPTY, id: nextId('c') })
+  }
+  const openEdit = (cert: Certificate) => {
+    setEditing(structuredClone(cert))
+  }
 
-  const handleSave = async (e: FormEvent) => {
+  const handleSave = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     if (!editing) return
+
     setSaving(true)
     await upsertCertificate(editing)
     setSaving(false)
@@ -90,8 +95,8 @@ export default function Certificates() {
                   {cert.name || 'Untitled'}
                 </h3>
                 <p className="text-xs text-white/80">
-                  {cert.issuer || '—'}
-                  {cert.year ? ` · ${cert.year}` : ''}
+                  {cert.issuer || '-'}
+                  {cert.year ? ` - ${cert.year}` : ''}
                 </p>
               </div>
             </div>

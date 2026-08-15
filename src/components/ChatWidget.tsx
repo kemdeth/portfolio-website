@@ -1,4 +1,4 @@
-import { lazy, Suspense, useCallback, useEffect, useRef, useState } from 'react'
+﻿import { lazy, Suspense, useCallback, useEffect, useRef, useState } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 import {
   Bot,
@@ -15,10 +15,12 @@ import {
 } from 'lucide-react'
 import { useLocation } from 'react-router-dom'
 import { cn } from '@/lib/utils'
-import { useData } from '@/context/DataContext'
-import { useToast } from '@/context/ToastContext'
+import { useData } from '@/context/useData'
+import { useBotGate } from '@/context/useBotGate'
+import { useToast } from '@/context/useToast'
+import { BotCheck } from '@/components/BotCheck'
 
-// react-markdown + syntax highlighting are heavy — load them only when the chat opens.
+// react-markdown + syntax highlighting are heavy - load them only when the chat opens.
 const ChatMarkdown = lazy(() =>
   import('@/components/ChatMarkdown').then((m) => ({ default: m.ChatMarkdown })),
 )
@@ -27,7 +29,7 @@ interface ChatMessage {
   id: string
   role: 'user' | 'assistant'
   content: string
-  /** True when the reply answers a question related to Kem → shows CV quick actions. */
+  /** True when the reply answers a question related to Kem - shows CV quick actions. */
   cvRelevant?: boolean
 }
 
@@ -35,18 +37,18 @@ const HISTORY_KEY = 'portfolio:chat-history'
 const SOUND_KEY = 'portfolio:chat-sound'
 
 const GREETING =
-  'Hi there! 👋 I\'m **Kem AI**, the virtual assistant for **Kem Deth**. Ask me about his skills, projects, experience, education, or how to get in touch. What would you like to know?'
+  'Hi there! I\'m **Kem AI**, the virtual assistant for **Kem Deth**. Ask me about his skills, projects, experience, education, or how to get in touch. What would you like to know?'
 
 const SUGGESTIONS = [
-  { emoji: '💼', label: "What are Kem's top skills?" },
-  { emoji: '🚀', label: 'Show me his recent projects' },
-  { emoji: '📄', label: 'How can I contact Kem or get his resume?' },
-  { emoji: '🎓', label: 'What is his education background?' },
+  { emoji: 'Skills', label: "What are Kem's top skills?" },
+  { emoji: 'Work', label: 'Show me his recent projects' },
+  { emoji: 'CV', label: 'How can I contact Kem or get his resume?' },
+  { emoji: 'Edu', label: 'What is his education background?' },
 ]
 
 // Pronouns / name that indicate a question about Kem himself.
 const KEM_PRONOUNS = /\b(you|your|yours|he|his|him|kem)\b/i
-// Topic words about his profile/background (substring match is fine — they're long words).
+// Topic words about his profile/background (substring match is fine - they're long words).
 const KEM_TOPICS = [
   'cv',
   'resume',
@@ -124,6 +126,7 @@ function playPing() {
 export function ChatWidget() {
   const { pathname } = useLocation()
   const { data } = useData()
+  const { verified, verify } = useBotGate()
   const { toast } = useToast()
 
   const [open, setOpen] = useState(false)
@@ -145,7 +148,7 @@ export function ChatWidget() {
     try {
       localStorage.setItem(HISTORY_KEY, JSON.stringify(messages))
     } catch {
-      // storage full — ignore
+      // storage full - ignore
     }
   }, [messages])
 
@@ -200,7 +203,7 @@ export function ChatWidget() {
       const controller = new AbortController()
       abortRef.current = controller
 
-      // ai.ts pulls in @google/generative-ai — load it only on first send.
+      // ai.ts pulls in @google/generative-ai - load it only on first send.
       let configured = true
       try {
         const ai = await import('@/lib/ai')
@@ -227,8 +230,8 @@ export function ChatWidget() {
         const message = aborted
           ? ''
           : !configured
-            ? "⚠️ Kem AI needs a Google Gemini API key to respond. Add `VITE_GEMINI_API_KEY` to your `.env` file and restart the dev server."
-            : '⚠️ Sorry, I couldn\'t reach Gemini right now. Please try again in a moment.'
+            ? "Kem AI needs a Google Gemini API key to respond. Add `VITE_GEMINI_API_KEY` to your `.env` file and restart the dev server."
+            : 'Sorry, I couldn\'t reach Gemini right now. Please try again in a moment.'
         if (message) {
           setMessages((prev) =>
             prev.map((m) => (m.id === assistantId ? { ...m, content: message } : m)),
@@ -359,7 +362,7 @@ export function ChatWidget() {
                         <>
                           <Suspense
                             fallback={
-                              <p className="text-sm text-gray-500 dark:text-gray-400">…</p>
+                              <p className="text-sm text-gray-500 dark:text-gray-400">...</p>
                             }
                           >
                             <ChatMarkdown content={m.content} />
@@ -380,7 +383,7 @@ export function ChatWidget() {
                                 href={resumeUrl}
                                 download
                                 title="Download Kem's CV"
-                                onClick={() => toast('CV download started! 📄')}
+                                onClick={() => toast('CV download started!')}
                                 className="inline-flex items-center gap-1.5 rounded-full border border-slate-300 bg-white/80 px-3 py-1 text-xs font-medium text-gray-700 shadow-sm transition hover:border-neon/60 hover:text-neon-deep dark:border-slate-700 dark:bg-slate-800/80 dark:text-gray-200 dark:hover:border-neon dark:hover:text-neon"
                               >
                                 <Download className="h-3.5 w-3.5" />
@@ -406,7 +409,7 @@ export function ChatWidget() {
                           <span className="typing-dot" />
                           <span className="typing-dot" />
                           <span className="typing-dot" />
-                          <span className="sr-only">Kem AI is typing…</span>
+                          <span className="sr-only">Kem AI is typing...</span>
                         </div>
                       ) : null
                     ) : (
@@ -442,33 +445,42 @@ export function ChatWidget() {
             </div>
 
             {/* Input bar */}
-            <form
-              onSubmit={handleSubmit}
-              className="flex items-end gap-2 border-t border-slate-200 bg-white/70 p-3 dark:border-slate-800 dark:bg-slate-900/70"
-            >
-              <textarea
-                ref={textareaRef}
-                value={input}
-                onChange={(e) => setInput(e.target.value)}
-                onKeyDown={(e) => {
-                  if (e.key === 'Enter' && !e.shiftKey) {
-                    e.preventDefault()
-                    void sendMessage(input)
-                  }
-                }}
-                rows={1}
-                placeholder="Ask Kem AI…"
-                className="input-base max-h-30 min-h-10 flex-1 resize-none rounded-xl px-3 py-2.5"
-              />
-              <button
-                type="submit"
-                disabled={isStreaming || !input.trim()}
-                title="Send"
-                className="btn-primary h-10 w-10 shrink-0 rounded-xl p-0"
+            {verified ? (
+              <form
+                onSubmit={handleSubmit}
+                className="flex items-end gap-2 border-t border-slate-200 bg-white/70 p-3 dark:border-slate-800 dark:bg-slate-900/70"
               >
-                <Send className="h-4 w-4" />
-              </button>
-            </form>
+                <textarea
+                  ref={textareaRef}
+                  value={input}
+                  onChange={(e) => setInput(e.target.value)}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter' && !e.shiftKey) {
+                      e.preventDefault()
+                      void sendMessage(input)
+                    }
+                  }}
+                  rows={1}
+                  placeholder="Ask Kem AI..."
+                  className="input-base max-h-30 min-h-10 flex-1 resize-none rounded-xl px-3 py-2.5"
+                />
+                <button
+                  type="submit"
+                  disabled={isStreaming || !input.trim()}
+                  title="Send"
+                  className="btn-primary h-10 w-10 shrink-0 rounded-xl p-0"
+                >
+                  <Send className="h-4 w-4" />
+                </button>
+              </form>
+            ) : (
+              <div className="flex flex-wrap items-center justify-between gap-3 border-t border-slate-200 bg-white/70 p-3 dark:border-slate-800 dark:bg-slate-900/70">
+                <p className="max-w-[10rem] text-xs leading-relaxed text-gray-500 dark:text-gray-400">
+                  Complete the "Not a Robot" check to chat with Kem AI.
+                </p>
+                <BotCheck size="compact" onVerify={(token) => token && verify(token)} />
+              </div>
+            )}
           </motion.div>
         )}
       </AnimatePresence>

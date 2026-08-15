@@ -1,8 +1,9 @@
-import { useEffect, useRef, useState, type CSSProperties } from 'react'
-import { useData } from '@/context/DataContext'
+﻿import { useEffect, useRef, useState, type CSSProperties } from 'react'
+import { useData } from '@/context/useData'
 import { Reveal } from '@/components/Reveal'
 import { SectionHeading } from '@/components/SectionHeading'
-import { TechIcon, skillBrandColor, skillIsDarkVariant } from '@/components/TechIcon'
+import { TechIcon } from '@/components/TechIcon'
+import { skillBrandColor, skillIsDarkVariant } from '@/lib/skillBrand'
 import type { Skill } from '@/lib/types'
 
 /** Human-friendly proficiency label derived from the level percentage. */
@@ -50,10 +51,10 @@ function SkillRow({
         </span>
       </div>
 
-      {/* Hover tooltip — level detail alongside the percentage */}
+      {/* Hover tooltip - level detail alongside the percentage */}
       <div className="pointer-events-none absolute -top-2 right-0 z-10 flex -translate-y-1 scale-95 items-center gap-1.5 rounded-lg border border-slate-200 bg-white px-2 py-1 text-[11px] font-semibold text-gray-700 opacity-0 shadow-lg transition-all duration-200 group-hover:-translate-y-0 group-hover:scale-100 group-hover:opacity-100 dark:border-slate-700 dark:bg-slate-800 dark:text-gray-200">
         <span className="h-1.5 w-1.5 rounded-full" style={{ backgroundColor: brandColor }} />
-        {label} · {skill.level}%
+        {label} - {skill.level}%
       </div>
 
       <div className="mt-3 h-2 overflow-hidden rounded-full bg-slate-200/80 dark:bg-white/10">

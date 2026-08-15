@@ -11,33 +11,41 @@ import {
   User,
   Wrench,
 } from 'lucide-react'
-import { useAuth } from '@/context/AuthContext'
-import { useData } from '@/context/DataContext'
+import { useData } from '@/context/useData'
+import { useAuth } from '@/context/useAuth'
 import { ThemeToggle } from '@/components/ThemeToggle'
 import { cn } from '@/lib/utils'
 
 const NAV_ITEMS = [
-  { to: '/admin/dashboard', label: 'Overview', icon: LayoutDashboard, end: true },
-  { to: '/admin/dashboard/profile', label: 'Profile & Settings', icon: User },
-  { to: '/admin/dashboard/certificates', label: 'Certificates', icon: Award },
-  { to: '/admin/dashboard/projects', label: 'Projects', icon: FolderGit2 },
-  { to: '/admin/dashboard/skills', label: 'Skills', icon: Wrench },
-  { to: '/admin/dashboard/messages', label: 'Messages', icon: MessageSquare },
+  { to: '/admin', label: 'Overview', icon: LayoutDashboard, end: true },
+  { to: '/admin/profile', label: 'Profile & Settings', icon: User },
+  { to: '/admin/certificates', label: 'Certificates', icon: Award },
+  { to: '/admin/projects', label: 'Projects', icon: FolderGit2 },
+  { to: '/admin/skills', label: 'Skills', icon: Wrench },
+  { to: '/admin/messages', label: 'Messages', icon: MessageSquare },
 ]
 
 export function DashboardLayout() {
-  const { user, logout } = useAuth()
   const { data } = useData()
+  const { username, logout } = useAuth()
   const navigate = useNavigate()
   const location = useLocation()
   const [sidebarOpen, setSidebarOpen] = useState(false)
+  const [loggingOut, setLoggingOut] = useState(false)
 
   const unread = data.messages.filter((m) => !m.read).length
   const current = NAV_ITEMS.find((item) =>
     item.end
-      ? location.pathname === item.to
+      ? location.pathname === item.to || location.pathname === '/admin/dashboard'
       : location.pathname.startsWith(item.to),
   )
+
+  const handleLogout = async () => {
+    setLoggingOut(true)
+    await logout()
+    // replace() removes the dashboard from history so the Back button can't restore it.
+    navigate('/admin/login', { replace: true })
+  }
 
   useEffect(() => {
     document.body.style.overflow = sidebarOpen ? 'hidden' : ''
@@ -45,11 +53,6 @@ export function DashboardLayout() {
       document.body.style.overflow = ''
     }
   }, [sidebarOpen])
-
-  const handleLogout = () => {
-    logout()
-    navigate('/admin/login')
-  }
 
   const sidebar = (
     <div className="flex h-full flex-col">
@@ -118,17 +121,8 @@ export function DashboardLayout() {
         >
           <ExternalLink className="h-4.5 w-4.5 text-gray-400" />
           View Site
-          <span className="ml-auto text-xs text-gray-400">↗</span>
+          <span className="ml-auto text-xs text-gray-400">Open</span>
         </Link>
-        <button
-          type="button"
-          onClick={handleLogout}
-          className="mt-1 flex w-full items-center gap-3 rounded-xl border border-transparent px-3 py-2.5 text-sm font-medium text-red-500 transition hover:border-red-200 hover:bg-red-50 dark:hover:border-red-500/20 dark:hover:bg-red-500/10"
-        >
-          <LogOut className="h-4.5 w-4.5" />
-          Log out
-          <span className="ml-auto">🚪</span>
-        </button>
       </div>
     </div>
   )
@@ -171,18 +165,31 @@ export function DashboardLayout() {
           </div>
           <div className="flex items-center gap-3">
             <ThemeToggle />
-            <div className="flex items-center gap-2.5 rounded-full border border-slate-200 bg-white/70 py-1 pl-1 pr-3 shadow-sm dark:border-white/15 dark:bg-white/5">
+            <div className="hidden items-center gap-2.5 rounded-full border border-slate-200 bg-white/70 py-1 pl-1 pr-3 shadow-sm dark:border-white/15 dark:bg-white/5 sm:flex">
               <img
                 src={data.profile.avatarUrl}
-                alt={user?.email ?? 'Admin'}
+                alt={username ?? 'Admin'}
                 width={32}
                 height={32}
                 className="aspect-square h-8 w-8 rounded-full border-2 border-neon/40 object-cover"
               />
-              <span className="hidden text-sm font-medium text-gray-600 dark:text-gray-300 sm:block">
-                {user?.email}
+              <span className="max-w-40 truncate text-sm font-medium text-gray-600 dark:text-gray-300">
+                {username ?? data.profile.email}
               </span>
             </div>
+            <button
+              type="button"
+              onClick={() => void handleLogout()}
+              disabled={loggingOut}
+              aria-label="Logout"
+              title="Logout"
+              className="inline-flex items-center gap-1.5 rounded-lg border border-slate-200 px-3 py-2 text-sm font-medium text-gray-700 transition hover:border-red-300 hover:bg-red-50 hover:text-red-600 disabled:cursor-not-allowed disabled:opacity-50 dark:border-white/15 dark:text-gray-200 dark:hover:border-red-500/40 dark:hover:bg-red-500/10 dark:hover:text-red-400"
+            >
+              <LogOut className="h-4 w-4" />
+              <span className="hidden md:inline">
+                {loggingOut ? 'Signing out...' : 'Logout'}
+              </span>
+            </button>
           </div>
         </header>
 

@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from 'react'
+﻿import { useCallback, useEffect, useRef, useState } from 'react'
 import {
   ChevronLeft,
   ChevronRight,
@@ -6,7 +6,7 @@ import {
   FolderGit2,
   Sparkles,
 } from 'lucide-react'
-import { useData } from '@/context/DataContext'
+import { useData } from '@/context/useData'
 import { Reveal } from '@/components/Reveal'
 import { SectionHeading } from '@/components/SectionHeading'
 import { GithubIcon } from '@/components/SocialIcons'
@@ -66,7 +66,7 @@ export function Projects() {
                   Featured <span className="text-neon-deep dark:text-neon">Projects</span>
                 </>
               }
-              subtitle="A selection of things I've designed and built — swipe or use the arrows to explore each one."
+              subtitle="A selection of things I've designed and built - swipe or use the arrows to explore each one."
             />
           </div>
           <div className="mb-12 flex items-center gap-3">
@@ -192,7 +192,7 @@ export function Projects() {
         ) : (
           <Reveal className="mt-10 text-center">
             <p className="text-sm text-gray-500 dark:text-gray-400">
-              No projects to show right now — check back soon!
+              No projects to show right now - check back soon!
             </p>
           </Reveal>
         )}

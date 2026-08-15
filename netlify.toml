@@ -1,0 +1,10 @@
+[build]
+  command = "npm run build"
+  publish = "dist"
+
+# SPA rewrite: every unknown path (including /admin and /admin/*) serves index.html
+# so client-side routes work on direct navigation and refresh.
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200

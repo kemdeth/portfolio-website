@@ -1,5 +1,5 @@
-import { useData } from '@/context/DataContext'
-import { useToast } from '@/context/ToastContext'
+﻿import { useData } from '@/context/useData'
+import { useToast } from '@/context/useToast'
 import { copyToClipboard } from '@/lib/clipboard'
 import { GithubIcon, LinkedinIcon, TelegramIcon } from '@/components/SocialIcons'
 import { Copy, MapPin } from 'lucide-react'
@@ -12,7 +12,7 @@ export function Footer() {
 
   const handleCopyEmail = async () => {
     const ok = await copyToClipboard(p.email)
-    if (ok) toast('Email copied to clipboard! 📋')
+    if (ok) toast('Email copied to clipboard!')
     else toast('Could not copy to clipboard.', 'error')
   }
 
@@ -91,7 +91,7 @@ export function Footer() {
               Let's connect
             </h3>
             <p className="mt-4 text-sm text-gray-500 dark:text-gray-400">
-              Have a project in mind or just want to say hi? Reach out — I usually respond within 24
+              Have a project in mind or just want to say hi? Reach out - I usually respond within 24
               hours.
             </p>
             <div className="mt-4 flex flex-wrap items-center gap-2">
@@ -113,14 +113,14 @@ export function Footer() {
 
         <div className="mt-10 flex flex-col items-center justify-between gap-3 border-t border-gray-200 pt-6 text-sm text-gray-500 dark:border-white/10 dark:text-gray-400 sm:flex-row">
           <p>
-            © {year} {p.name}. Built with React, Vite & Tailwind CSS.
+            (c) {year} {p.name}. Built with React, Vite & Tailwind CSS.
           </p>
           <div className="flex items-center gap-4">
             <a
               href={p.resumeUrl}
               target="_blank"
               rel="noopener noreferrer"
-              onClick={() => toast('CV download started! 📄')}
+              onClick={() => toast('CV download started!')}
               className="transition hover:text-neon-deep dark:hover:text-neon"
             >
               Download CV
