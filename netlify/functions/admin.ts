@@ -51,12 +51,26 @@ function json(statusCode: number, body: unknown): NetlifyResponse {
   }
 }
 
-/** Lazily builds a Supabase client using the server-side service role key. */
+/**
+ * Lazily builds a Supabase client.
+ * Prefers the service-role key (bypasses RLS); falls back to the anon key
+ * when server-side secrets aren't configured (requires RLS policies).
+ */
 function supabaseClient(): SupabaseClient | null {
-  const url = process.env.SUPABASE_URL
-  const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY
-  if (!url || !serviceRoleKey) return null
-  return createClient(url, serviceRoleKey, { auth: { persistSession: false } })
+  const url = process.env.SUPABASE_URL || process.env.VITE_SUPABASE_URL
+  const key =
+    process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.VITE_SUPABASE_ANON_KEY
+  if (!url || !key) {
+    const missing = [
+      !process.env.SUPABASE_URL && !process.env.VITE_SUPABASE_URL && 'SUPABASE_URL/VITE_SUPABASE_URL',
+      !process.env.SUPABASE_SERVICE_ROLE_KEY &&
+        !process.env.VITE_SUPABASE_ANON_KEY &&
+        'SUPABASE_SERVICE_ROLE_KEY/VITE_SUPABASE_ANON_KEY',
+    ].filter(Boolean)
+    console.error(`[admin] Supabase init failed — missing: ${missing.join(', ')}`)
+    return null
+  }
+  return createClient(url, key, { auth: { persistSession: false } })
 }
 
 /** Maps a Supabase message row to the shape used by the admin UI. */

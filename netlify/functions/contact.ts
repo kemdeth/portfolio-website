@@ -236,12 +236,13 @@ export const handler = async (event: NetlifyEvent): Promise<NetlifyResponse> => 
   const results = { telegram: false, supabase: false }
   const errors: string[] = []
 
-  // Supabase insert (server-side with service role key — bypasses RLS)
-  const supabaseUrl = process.env.SUPABASE_URL
-  const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY
-  if (supabaseUrl && serviceRoleKey) {
+  // Supabase insert — prefers service-role key; falls back to anon key with RLS.
+  const supabaseUrl = process.env.SUPABASE_URL || process.env.VITE_SUPABASE_URL
+  const supabaseKey =
+    process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.VITE_SUPABASE_ANON_KEY
+  if (supabaseUrl && supabaseKey) {
     try {
-      const supabase = createClient(supabaseUrl, serviceRoleKey, {
+      const supabase = createClient(supabaseUrl, supabaseKey, {
         auth: { persistSession: false },
       })
       const row: Record<string, unknown> = {
@@ -264,7 +265,7 @@ export const handler = async (event: NetlifyEvent): Promise<NetlifyResponse> => 
       errors.push(`supabase: ${err instanceof Error ? err.message : String(err)}`)
     }
   } else {
-    errors.push('supabase: SUPABASE_URL or SUPABASE_SERVICE_ROLE_KEY not configured')
+    errors.push('supabase: SUPABASE_URL or SUPABASE_SERVICE_ROLE_KEY (or VITE_ fallbacks) not configured')
   }
 
   // Telegram notification

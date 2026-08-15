@@ -105,14 +105,65 @@ create table if not exists public.testimonials (
 alter table public.testimonials enable row level security;
 
 -- ================================================================
--- OPTIONAL: Allow the public site to read data directly via the
--- anon key. Uncomment these policies if VITE_SUPABASE_URL and
--- VITE_SUPABASE_ANON_KEY are configured in the build environment.
+-- RLS policies — required when using the anon key (VITE_SUPABASE_ANON_KEY)
+-- instead of the service-role key for server-side operations.
+--
+-- The Netlify functions provide their own access control:
+--   • contact.ts  — rate-limited, honeypot + Turnstile protected
+--   • admin.ts    — session-cookie authenticated
+--
+-- Run these statements in the Supabase SQL editor
+-- (Dashboard → SQL → New query) to enable them.
 -- ================================================================
 
--- create policy "Public read" on public.site_profile for select using (true);
--- create policy "Public read" on public.skills        for select using (true);
--- create policy "Public read" on public.projects      for select using (true);
--- create policy "Public read" on public.certificates  for select using (true);
--- create policy "Public read" on public.testimonials  for select using (true);
--- create policy "Public read" on public.messages      for select using (true);
+-- Public read access (site data for cross-device sync)
+drop policy if exists "Public read" on public.site_profile;
+drop policy if exists "Public read" on public.skills;
+drop policy if exists "Public read" on public.projects;
+drop policy if exists "Public read" on public.certificates;
+drop policy if exists "Public read" on public.testimonials;
+drop policy if exists "Public read" on public.messages;
+create policy "Public read" on public.site_profile  for select using (true);
+create policy "Public read" on public.skills        for select using (true);
+create policy "Public read" on public.projects      for select using (true);
+create policy "Public read" on public.certificates  for select using (true);
+create policy "Public read" on public.testimonials  for select using (true);
+create policy "Public read" on public.messages      for select using (true);
+
+-- Message write policies (contact form inserts, admin dashboard updates/deletes)
+drop policy if exists "Public insert messages" on public.messages;
+drop policy if exists "Public update messages" on public.messages;
+drop policy if exists "Public delete messages" on public.messages;
+create policy "Public insert messages"  on public.messages for insert with check (true);
+create policy "Public update messages"  on public.messages for update using (true);
+create policy "Public delete messages"  on public.messages for delete using (true);
+
+-- Admin write policies for other tables (admin dashboard CRUD)
+drop policy if exists "Public upsert site_profile" on public.site_profile;
+drop policy if exists "Public update site_profile" on public.site_profile;
+drop policy if exists "Public upsert skills" on public.skills;
+drop policy if exists "Public update skills" on public.skills;
+drop policy if exists "Public delete skills" on public.skills;
+drop policy if exists "Public upsert projects" on public.projects;
+drop policy if exists "Public update projects" on public.projects;
+drop policy if exists "Public delete projects" on public.projects;
+drop policy if exists "Public upsert certificates" on public.certificates;
+drop policy if exists "Public update certificates" on public.certificates;
+drop policy if exists "Public delete certificates" on public.certificates;
+drop policy if exists "Public upsert testimonials" on public.testimonials;
+drop policy if exists "Public update testimonials" on public.testimonials;
+drop policy if exists "Public delete testimonials" on public.testimonials;
+create policy "Public upsert site_profile"  on public.site_profile  for insert with check (true);
+create policy "Public update site_profile"  on public.site_profile  for update using (true);
+create policy "Public upsert skills"        on public.skills        for insert with check (true);
+create policy "Public update skills"        on public.skills        for update using (true);
+create policy "Public delete skills"        on public.skills        for delete using (true);
+create policy "Public upsert projects"      on public.projects      for insert with check (true);
+create policy "Public update projects"      on public.projects      for update using (true);
+create policy "Public delete projects"      on public.projects      for delete using (true);
+create policy "Public upsert certificates" on public.certificates  for insert with check (true);
+create policy "Public update certificates" on public.certificates  for update using (true);
+create policy "Public delete certificates" on public.certificates  for delete using (true);
+create policy "Public upsert testimonials" on public.testimonials  for insert with check (true);
+create policy "Public update testimonials" on public.testimonials  for update using (true);
+create policy "Public delete testimonials" on public.testimonials  for delete using (true);
