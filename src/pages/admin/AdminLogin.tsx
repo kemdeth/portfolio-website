@@ -1,6 +1,6 @@
 import { useEffect, useState, type FormEvent } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
-import { ArrowLeft, Lock, Mail } from 'lucide-react'
+import { ArrowLeft, Lock, User } from 'lucide-react'
 import { useAuth } from '@/context/useAuth'
 
 export default function AdminLogin() {
@@ -76,15 +76,15 @@ export default function AdminLogin() {
                 Username
               </label>
               <div className="relative">
-                <Mail className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
+                <User className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
                 <input
                   id="admin-username"
                   type="text"
                   autoComplete="username"
                   value={username}
                   onChange={(e) => setUsername(e.target.value)}
-                  className="input-base pl-9"
-                  placeholder="admin@example.com"
+                  className="input-base pl-10"
+                  placeholder="Enter username"
                   required
                 />
               </div>
@@ -97,16 +97,19 @@ export default function AdminLogin() {
               >
                 Password
               </label>
-              <input
-                id="admin-password"
-                type="password"
-                autoComplete="current-password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                className="input-base"
-                placeholder="••••••••"
-                required
-              />
+              <div className="relative">
+                <Lock className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
+                <input
+                  id="admin-password"
+                  type="password"
+                  autoComplete="current-password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  className="input-base pl-10"
+                  placeholder="••••••••"
+                  required
+                />
+              </div>
             </div>
 
             {error && (
