@@ -1,4 +1,4 @@
-﻿import { BadgeCheck, GraduationCap, Heart } from 'lucide-react'
+﻿import { GraduationCap, Heart } from 'lucide-react'
 import { useData } from '@/context/useData'
 import { Reveal } from '@/components/Reveal'
 import { SectionHeading } from '@/components/SectionHeading'
@@ -66,41 +66,6 @@ export function About() {
                 </ul>
               </div>
 
-              <div className="card-surface p-5">
-                <h3 className="flex items-center gap-2 font-display font-semibold text-gray-900 dark:text-white">
-                  <BadgeCheck className="h-5 w-5 text-neon-deep dark:text-neon" />
-                  Certificates
-                </h3>
-                <ul className="mt-4 space-y-3">
-                  {data.certificates.map((cert) => (
-                    <li
-                      key={cert.id}
-                      className="flex items-center gap-3 text-sm text-gray-600 dark:text-gray-300"
-                    >
-                      {cert.image ? (
-                        <img
-                          src={cert.image}
-                          alt={cert.name}
-                          loading="lazy"
-                          className="h-10 w-14 shrink-0 rounded-lg border border-gray-200 object-cover dark:border-white/10"
-                        />
-                      ) : (
-                        <BadgeCheck className="h-4 w-4 shrink-0 text-neon-deep dark:text-neon" />
-                      )}
-                      <span className="min-w-0">
-                        {cert.name}
-                        <span className="text-gray-400 dark:text-gray-500">
-                          {' '}
-                          - {cert.issuer}
-                        </span>
-                      </span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </Reveal>
-
-            <Reveal delay={0.3} className="mt-6">
               <div className="card-surface p-5">
                 <h3 className="flex items-center gap-2 font-display font-semibold text-gray-900 dark:text-white">
                   <Heart className="h-5 w-5 text-neon-deep dark:text-neon" />
