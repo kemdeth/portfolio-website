@@ -107,13 +107,21 @@ export function DataProvider({ children }: { children: ReactNode }) {
         try {
           const res = await apiCall()
           if (!res.ok && res.status !== 0) {
-            // Server rejected the change – roll back.
-            await persist(prev)
-            toastRef.current(res.error ?? 'Save failed.', 'error')
+            // If the server can't sync (e.g., Supabase not configured), keep local save.
+            const isNotConfigured =
+              res.error?.toLowerCase().includes('not configured') ?? false
+            if (!isNotConfigured) {
+              // Server rejected the change – roll back.
+              await persist(prev)
+              toastRef.current(res.error ?? 'Save failed.', 'error')
+            } else {
+              // Server can't persist – keep local save, gentle notice.
+              toastRef.current('Changes saved locally. Server sync is unavailable.', 'info')
+            }
           }
         } catch {
           // Network failure – keep optimistic update but warn.
-          toastRef.current('Offline – changes saved locally only.', 'error')
+          toastRef.current('Offline – changes saved locally only.', 'info')
         }
       }
     }

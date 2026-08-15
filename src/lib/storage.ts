@@ -186,9 +186,10 @@ export class SupabaseAdapter implements StorageAdapter {
     }
   }
 
-  async persist(_data: SiteData): Promise<void> {
-    // Writes go through the admin Netlify function (server-side, service_role).
-    // The browser never writes directly to Supabase tables.
+  async persist(data: SiteData): Promise<void> {
+    // Always cache locally so data survives when server-side Supabase is unavailable.
+    // When the server is configured, writes also go through the admin Netlify function.
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(data))
   }
 }
 
