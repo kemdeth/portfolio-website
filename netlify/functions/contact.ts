@@ -283,6 +283,6 @@ export const handler = async (event: NetlifyEvent): Promise<NetlifyResponse> => 
 
   // Succeed if at least one delivery channel worked
   const ok = results.supabase || results.telegram
-  const statusCode = ok ? 200 : errors.some((e) => e.startsWith('supabase')) ? 500 : 502
+  const statusCode = ok ? 200 : 500
   return json(statusCode, { ok, results, errors: errors.length ? errors : undefined })
 }

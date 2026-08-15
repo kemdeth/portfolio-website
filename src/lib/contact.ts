@@ -39,15 +39,16 @@ export async function sendContactMessage(payload: ContactPayload): Promise<Conta
     throw new ContactError(0, 'Could not reach the server.')
   }
 
-  let data: { results?: ContactDelivery; error?: string } = {}
+  let data: { results?: ContactDelivery; error?: string; errors?: string[] } = {}
   try {
-    data = (await res.json()) as { results?: ContactDelivery; error?: string }
+    data = (await res.json()) as { results?: ContactDelivery; error?: string; errors?: string[] }
   } catch {
     data = {}
   }
 
   if (!res.ok) {
-    throw new ContactError(res.status, data.error ?? `Contact function returned ${res.status}`)
+    const msg = data.error ?? data.errors?.join('; ') ?? `Contact function returned ${res.status}`
+    throw new ContactError(res.status, msg)
   }
   return data.results ?? { telegram: false, supabase: false }
 }

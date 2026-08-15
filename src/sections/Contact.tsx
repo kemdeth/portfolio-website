@@ -61,7 +61,7 @@ export function Contact() {
 
     setSending(true)
     try {
-      await sendContactMessage({
+      const delivery = await sendContactMessage({
         name,
         email,
         subject: subject || undefined,
@@ -76,7 +76,11 @@ export function Contact() {
       botRef.current?.reset()
       setSent(true)
       setTimeout(() => setSent(false), 6000)
-      toast('Message sent successfully! I usually reply within 24 hours.')
+      if (delivery.supabase) {
+        toast('Message sent successfully! I usually reply within 24 hours.')
+      } else {
+        toast('Message sent! (Inbox sync is temporarily unavailable.)', 'info')
+      }
     } catch (err) {
       if (err instanceof ContactError && err.status === 429) {
         toast('Too many messages from you. Please try again later.', 'error')
