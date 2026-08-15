@@ -12,6 +12,8 @@ import type {
 export interface DataContextValue {
   data: SiteData
   loading: boolean
+  /** Re-fetches all data from the adapter (Supabase or localStorage). */
+  refreshData: () => Promise<void>
   resetData: () => Promise<void>
   updateProfile: (profile: Profile) => Promise<void>
   upsertSkill: (skill: Skill) => Promise<void>

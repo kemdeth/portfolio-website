@@ -1,6 +1,10 @@
 import { createClient, type SupabaseClient } from '@supabase/supabase-js'
 import { parseCookies, verifySessionToken, SESSION_COOKIE } from './_shared/session.js'
 
+// ---------------------------------------------------------------------------
+// Types
+// ---------------------------------------------------------------------------
+
 interface AdminPayload {
   action?: string
   data?: unknown
@@ -17,6 +21,20 @@ interface NetlifyResponse {
   headers: Record<string, string>
   body: string
 }
+
+interface DbMessageRow {
+  id: string
+  name: string
+  email: string
+  subject: string | null
+  body: string
+  read: boolean
+  created_at: string
+}
+
+// ---------------------------------------------------------------------------
+// Helpers
+// ---------------------------------------------------------------------------
 
 const CORS_HEADERS = {
   'Access-Control-Allow-Origin': '*',
@@ -41,17 +59,7 @@ function supabaseClient(): SupabaseClient | null {
   return createClient(url, serviceRoleKey, { auth: { persistSession: false } })
 }
 
-interface DbMessageRow {
-  id: string
-  name: string
-  email: string
-  subject: string | null
-  body: string
-  read: boolean
-  created_at: string
-}
-
-/** Maps a Supabase row to the shape used by the admin UI. */
+/** Maps a Supabase message row to the shape used by the admin UI. */
 function mapMessage(row: DbMessageRow) {
   return {
     id: row.id,
@@ -63,6 +71,10 @@ function mapMessage(row: DbMessageRow) {
     createdAt: row.created_at,
   }
 }
+
+// ---------------------------------------------------------------------------
+// Handler
+// ---------------------------------------------------------------------------
 
 export const handler = async (event: NetlifyEvent): Promise<NetlifyResponse> => {
   if (event.httpMethod === 'OPTIONS') {
@@ -83,11 +95,14 @@ export const handler = async (event: NetlifyEvent): Promise<NetlifyResponse> => 
     return json(400, { ok: false, error: 'Action type is required' })
   }
 
-  // --- Strict auth gate: every admin action (read or write) requires a valid session. ---
+  // --- Strict auth gate: every admin action requires a valid session. ---
   const cookies = parseCookies(event.headers?.cookie)
   const session = verifySessionToken(cookies[SESSION_COOKIE])
   if (!session) {
-    return json(401, { ok: false, error: 'Unauthorized. Please log in to access the admin dashboard.' })
+    return json(401, {
+      ok: false,
+      error: 'Unauthorized. Please log in to access the admin dashboard.',
+    })
   }
 
   const supabase = supabaseClient()
@@ -99,6 +114,10 @@ export const handler = async (event: NetlifyEvent): Promise<NetlifyResponse> => 
   const id = typeof data.id === 'string' ? data.id : ''
 
   try {
+    // =================================================================
+    // Messages
+    // =================================================================
+
     if (payload.action === 'list_messages') {
       const { data: rows, error } = await supabase
         .from('messages')
@@ -122,8 +141,138 @@ export const handler = async (event: NetlifyEvent): Promise<NetlifyResponse> => 
       return json(200, { ok: true, id })
     }
 
+    // =================================================================
+    // Profile (singleton – JSONB)
+    // =================================================================
+
+    if (payload.action === 'upsert_profile') {
+      const profileData = payload.data
+      const { error } = await supabase.from('site_profile').upsert(
+        { id: 1, data: profileData, updated_at: new Date().toISOString() },
+        { onConflict: 'id' },
+      )
+      if (error) return json(500, { ok: false, error: error.message })
+      return json(200, { ok: true })
+    }
+
+    // =================================================================
+    // Skills
+    // =================================================================
+
+    if (payload.action === 'upsert_skill') {
+      const row = {
+        id: data.id as string,
+        category: data.category as string,
+        name: data.name as string,
+        level: data.level as number,
+        icon: (data.icon as string) ?? null,
+        color: (data.color as string) ?? null,
+        updated_at: new Date().toISOString(),
+      }
+      const { error } = await supabase
+        .from('skills')
+        .upsert(row, { onConflict: 'id' })
+      if (error) return json(500, { ok: false, error: error.message })
+      return json(200, { ok: true })
+    }
+
+    if (payload.action === 'delete_skill') {
+      const { error } = await supabase.from('skills').delete().eq('id', id)
+      if (error) return json(500, { ok: false, error: error.message })
+      return json(200, { ok: true, id })
+    }
+
+    // =================================================================
+    // Projects
+    // =================================================================
+
+    if (payload.action === 'upsert_project') {
+      const row = {
+        id: data.id as string,
+        title: data.title as string,
+        description: (data.description as string) ?? '',
+        challenge: (data.challenge as string) ?? null,
+        tags: (data.tags as string[]) ?? [],
+        image: (data.image as string) ?? '',
+        live_url: (data.liveUrl as string) ?? null,
+        source_url: (data.sourceUrl as string) ?? null,
+        featured: Boolean(data.featured),
+        status: (data.status as string) ?? null,
+        sort_order: (data.order as number) ?? 0,
+        updated_at: new Date().toISOString(),
+      }
+      const { error } = await supabase
+        .from('projects')
+        .upsert(row, { onConflict: 'id' })
+      if (error) return json(500, { ok: false, error: error.message })
+      return json(200, { ok: true })
+    }
+
+    if (payload.action === 'delete_project') {
+      const { error } = await supabase.from('projects').delete().eq('id', id)
+      if (error) return json(500, { ok: false, error: error.message })
+      return json(200, { ok: true, id })
+    }
+
+    // =================================================================
+    // Certificates
+    // =================================================================
+
+    if (payload.action === 'upsert_certificate') {
+      const row = {
+        id: data.id as string,
+        name: data.name as string,
+        issuer: (data.issuer as string) ?? '',
+        year: (data.year as string) ?? null,
+        url: (data.url as string) ?? null,
+        image: (data.image as string) ?? null,
+        updated_at: new Date().toISOString(),
+      }
+      const { error } = await supabase
+        .from('certificates')
+        .upsert(row, { onConflict: 'id' })
+      if (error) return json(500, { ok: false, error: error.message })
+      return json(200, { ok: true })
+    }
+
+    if (payload.action === 'delete_certificate') {
+      const { error } = await supabase.from('certificates').delete().eq('id', id)
+      if (error) return json(500, { ok: false, error: error.message })
+      return json(200, { ok: true, id })
+    }
+
+    // =================================================================
+    // Testimonials
+    // =================================================================
+
+    if (payload.action === 'upsert_testimonial') {
+      const row = {
+        id: data.id as string,
+        name: data.name as string,
+        role: (data.role as string) ?? '',
+        quote: (data.quote as string) ?? '',
+        avatar: (data.avatar as string) ?? '',
+        rating: (data.rating as number) ?? 5,
+        updated_at: new Date().toISOString(),
+      }
+      const { error } = await supabase
+        .from('testimonials')
+        .upsert(row, { onConflict: 'id' })
+      if (error) return json(500, { ok: false, error: error.message })
+      return json(200, { ok: true })
+    }
+
+    if (payload.action === 'delete_testimonial') {
+      const { error } = await supabase.from('testimonials').delete().eq('id', id)
+      if (error) return json(500, { ok: false, error: error.message })
+      return json(200, { ok: true, id })
+    }
+
     return json(400, { ok: false, error: `Unknown admin action: ${payload.action}` })
   } catch (err) {
-    return json(500, { ok: false, error: err instanceof Error ? err.message : String(err) })
+    return json(500, {
+      ok: false,
+      error: err instanceof Error ? err.message : String(err),
+    })
   }
 }
