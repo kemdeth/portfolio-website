@@ -27,8 +27,8 @@ function PageLoader() {
 
 export default function App() {
   return (
-    <DataProvider>
-      <ToastProvider>
+    <ToastProvider>
+      <DataProvider>
         <BotGateProvider>
           <AuthProvider>
             <BrowserRouter>
@@ -71,8 +71,8 @@ export default function App() {
             </BrowserRouter>
           </AuthProvider>
         </BotGateProvider>
-      </ToastProvider>
-    </DataProvider>
+      </DataProvider>
+    </ToastProvider>
   )
 }
 
