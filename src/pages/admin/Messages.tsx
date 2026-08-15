@@ -56,7 +56,7 @@ export default function Messages() {
       } else {
         setLive(false)
         if (!opts?.silent) {
-          toast('Could not reach the message server. Showing local inbox.', 'error')
+          toast('Showing local inbox. Server sync is unavailable.', 'info')
         }
       }
       setLoading(false)
@@ -277,7 +277,11 @@ export default function Messages() {
                       {msg.body}
                     </p>
                     <a
-                      href={`mailto:${msg.email}?subject=${encodeURIComponent(`Re: ${msg.subject ?? 'Your message'}`)}&body=${encodeURIComponent(`\n\n---\nOn ${formatDate(msg.createdAt)}, ${msg.name} wrote:\n${msg.body}`)}`}
+                      href={`mailto:${msg.email}?subject=${encodeURIComponent(`Re: ${msg.subject ?? 'Your message'}`)}&body=${encodeURIComponent(`
+
+---
+On ${formatDate(msg.createdAt)}, ${msg.name} wrote:
+${msg.body}`)}`}
                       className="btn-ghost mt-4 inline-flex items-center gap-2 text-sm"
                     >
                       <Reply className="h-4 w-4" />

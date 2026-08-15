@@ -1,6 +1,7 @@
 import { createClient, type SupabaseClient } from '@supabase/supabase-js'
 import type {
   Certificate,
+  Message,
   Profile,
   Project,
   SiteData,
@@ -24,6 +25,18 @@ export interface StorageAdapter {
 // ---------------------------------------------------------------------------
 
 const STORAGE_KEY = 'portfolio:data:v1'
+
+/** Reads cached messages from localStorage (used by both adapters). */
+function cachedMessages(): Message[] {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY)
+    if (!raw) return []
+    const parsed = JSON.parse(raw) as { messages?: Message[] }
+    return parsed.messages ?? []
+  } catch {
+    return []
+  }
+}
 
 export class LocalStorageAdapter implements StorageAdapter {
   name = 'local'
@@ -165,7 +178,7 @@ export class SupabaseAdapter implements StorageAdapter {
         projects,
         certificates,
         testimonials,
-        messages: [], // Messages are loaded separately via the admin API
+        messages: cachedMessages(), // Messages stored locally (server-side Supabase may be unavailable)
       }
     } catch {
       // Network or auth error – fall back to seed data.
